@@ -80,7 +80,8 @@ func main() {
 
 	Config := config.GetConfig()
 	logger := newlog.InitLog("QQbot", Config.Global.DeviceID)
-	Service := service.NewService(logger)
+	ServiceOperator := service.GetAndInitOperator(Config.Service.SelfQQ)
+	Service := service.NewService(Config, ServiceOperator)
 	newlog.SetLabel("通过配置文件配置access_token字段")
 	Handler, err := handler.NewWebsocket("ws://127.0.0.1:3001?access_token=token", logger, Service)
 	if err != nil {

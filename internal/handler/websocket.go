@@ -23,7 +23,7 @@ type Websocket struct {
 	Uuid    uuid.UUID
 }
 
-func NewWebsocket(URL string, logger newlog.Logger, service *service.Service) (newHandler *Websocket, err error) {
+func NewWebsocket(URL string, logger newlog.Logger, Service *service.Service) (newHandler *Websocket, err error) {
 	conn, resp, err := websocket.DefaultDialer.Dial(URL, nil)
 	if err != nil {
 		if resp != nil {
@@ -35,12 +35,12 @@ func NewWebsocket(URL string, logger newlog.Logger, service *service.Service) (n
 	}
 	newlog.SetLabel("Lack Config To limit Channel Capacity")
 	ch := make(chan model.Message, 100)
-	//service.SetSendCh(ch)
+	service.SetOperatorHub(ch)
 	return &Websocket{
 		logger:  logger,
 		conn:    conn,
 		SendCh:  ch,
-		service: service,
+		service: Service,
 		Uuid:    uuid.NewV4(),
 	}, nil
 }

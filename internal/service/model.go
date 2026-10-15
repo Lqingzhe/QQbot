@@ -71,6 +71,6 @@ func NewService(config *model.Config, operatorHub *operator) *Service {
 	return &Service{
 		logCh:       make(chan newlog.Logger, config.Service.ChannelLength),
 		config:      config,
-		operatorHub: GetOperator(),
+		operatorHub: operatorHub,
 	}
 }

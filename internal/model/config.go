@@ -12,6 +12,7 @@ type Responser struct {
 	IsPrivate bool
 }
 type ServiceConfig struct {
+	SelfQQ        int64
 	ChannelLength int64
 	TimeoutSec    int64
 }

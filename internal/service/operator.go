@@ -50,8 +50,10 @@ func init() {
 		immutableKey: make(map[string]struct{}),
 	}
 }
-func SetOperatorHub(sendCh chan model.Message, selfQQID int64) *operator {
+func SetOperatorHub(sendCh chan model.Message) {
 	Operator.sendCh = sendCh
+}
+func GetAndInitOperator(selfQQID int64) *operator {
 	Operator.selfQQ = selfQQID
 	return Operator
 }
