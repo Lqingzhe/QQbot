@@ -18,6 +18,9 @@ const (
 
 var SetLabel func(LogLabel) = SetLabel_Debug
 
+func SetLabel_Ignore(label LogLabel) {
+	return
+}
 func SetLabel_Debug(label LogLabel) {
 	LogGreenf("%s :\n%s", true, label.String(), debug.Stack())
 }
@@ -27,7 +30,9 @@ func SetLabel_Test(label LogLabel) {
 func SetLabel_Production(label LogLabel) {
 	LogRedf("%s :\n%s", true, label.String(), debug.Stack())
 }
-
+func SetIgnoreModel() {
+	SetLabel = SetLabel_Ignore
+}
 func SetDebugModel() {
 	SetLabel = SetLabel_Debug
 }

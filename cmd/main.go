@@ -76,7 +76,7 @@ import (
 //		fmt.Println("退出")
 //	}
 func main() {
-	newlog.SetDebugModel()
+	newlog.SetIgnoreModel()
 
 	Config := config.GetConfig()
 	logger := newlog.InitLog("QQbot", Config.Global.DeviceID)
