@@ -1,4 +1,4 @@
 .env
 .idea
 qbot.posf
-.exe
+*.exe
