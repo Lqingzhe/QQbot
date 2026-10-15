@@ -107,42 +107,43 @@ func (o *operator) do(ctx context.Context, key string, Event *model.Event) error
 	return op(ctx, o.sendCh, Event)
 }
 func init() {
+	officialPlug := handlemessage.NewOfficialPlug(IsInPrivate, IsInGroup, GetSelfQQ)
 	{
 		//message
-		registerBasicOp(tool.GetRoutKet(model.MessagePos.String(), model.PrivateMsg.String()), handlemessage.Private)
-		registerBasicOp(tool.GetRoutKet(model.MessagePos.String(), model.GroupMsg.String()), handlemessage.Group)
+		registerBasicOp(tool.GetRoutKet(model.MessagePos.String(), model.PrivateMsg.String()), officialPlug.Private)
+		registerBasicOp(tool.GetRoutKet(model.MessagePos.String(), model.GroupMsg.String()), officialPlug.Group)
 	}
 
 	{
 		//notice
-		registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.NotifyNt.String(), model.NotifyNt_Poke.String()), handlemessage.Poke)
+		registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.NotifyNt.String(), model.NotifyNt_Poke.String()), officialPlug.Poke)
 
-		registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.ClientStatusNt.String()), handlemessage.ClientStatus)
+		registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.ClientStatusNt.String()), officialPlug.ClientStatus)
 
-		registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.FriendRecallNt.String()), handlemessage.FriendRecall)
-		registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupRecallNt.String()), handlemessage.GroupRecall)
+		registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.FriendRecallNt.String()), officialPlug.FriendRecall)
+		registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupRecallNt.String()), officialPlug.GroupRecall)
 		{
 			//GroupBan
-			registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupBanNt.String(), model.GroupBan_Ban.String()), handlemessage.GroupBan)
-			registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupBanNt.String(), model.GroupBan_ListBan.String()), handlemessage.GroupListBan)
+			registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupBanNt.String(), model.GroupBan_Ban.String()), officialPlug.GroupBan)
+			registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupBanNt.String(), model.GroupBan_ListBan.String()), officialPlug.GroupListBan)
 		}
-		registerBasicOp(tool.GetRoutKet(model.NoticePos.String(),model.GroupIncreaseNt.String()), handlemessage.GroupIncrease)
+		registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupIncreaseNt.String()), officialPlug.GroupIncrease)
 		{
 			//GroupDecrease
-			registerBasicOp(tool.GetRoutKet(model.NoticePos.String(),model.GroupDecreaseNt.String(),model.GroupDecrease_KickMe.String()),handlemessage.GroupKickMe)
+			registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupDecreaseNt.String(), model.GroupDecrease_KickMe.String()), officialPlug.GroupKickMe)
 		}
 		{
 			//GroupAdmin
-			registerBasicOp(tool.GetRoutKet(model.NoticePos.String(),model.GroupAdminNt.String(),model.GroupAdmin_Set.String()),handlemessage.GroupSetAdmin)
-			registerBasicOp(tool.GetRoutKet(model.NoticePos.String(),model.GroupAdminNt.String(),model.GroupAdmin_Unset.String()),handlemessage.GroupUnsetAdmin)
+			registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupAdminNt.String(), model.GroupAdmin_Set.String()), officialPlug.GroupSetAdmin)
+			registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupAdminNt.String(), model.GroupAdmin_Unset.String()), officialPlug.GroupUnsetAdmin)
 		}
 	}
 	{
 		//Request
 		{
 			//GroupRequest
-			registerBasicOp(tool.GetRoutKet(model.RequestPos.String(), model.GroupReq.String(),model.GroupReq_Add.String()),handlemessage.GroupApplyReq)
-			registerBasicOp(tool.GetRoutKet(model.RequestPos.String(), model.GroupReq.String(),model.GroupReq_Invite.String()),handlemessage.GroupInviteReq)
+			registerBasicOp(tool.GetRoutKet(model.RequestPos.String(), model.GroupReq.String(), model.GroupReq_Add.String()), officialPlug.GroupApplyReq)
+			registerBasicOp(tool.GetRoutKet(model.RequestPos.String(), model.GroupReq.String(), model.GroupReq_Invite.String()), officialPlug.GroupInviteReq)
 		}
 	}
 }
