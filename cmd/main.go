@@ -5,6 +5,7 @@ import (
 	"demo/internal/handler"
 	"demo/internal/service"
 	newlog "demo/pkg/log"
+	"fmt"
 )
 
 //	func main() {
@@ -90,4 +91,6 @@ func main() {
 	Service.Run(Config)
 	Handler.Run()
 
+	fmt.Scanln()//回车触发优雅退出
+	将配置文件写入持久化
 }

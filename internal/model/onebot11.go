@@ -156,23 +156,24 @@ func (s SubType) String() string {
 }
 
 const (
-	GroupAdmin_Set        SubType = "set"        // 某人设为管理员
-	GroupAdmin_Unset      SubType = "unset"      // 某人取消管理员
-	GroupDecrease_Leave   SubType = "leave"      // 主动退群
-	GroupDecrease_Kick    SubType = "kick"       // 别人被踢出群
-	GroupDecrease_KickMe  SubType = "kick_me"    // 机器人自己被踢出群聊
-	GroupIncrease_Approve SubType = "approve"    // 同意入群
-	GroupIncrease_Invite  SubType = "invite"     // 被邀请入群
-	GroupBan_Ban          SubType = "ban"        // 禁言
-	GroupBan_ListBan      SubType = "list_ban"   // 解除禁言
-	GroupReq_Add          SubType = "add"        // 加群请求
-	GroupReq_Invite       SubType = "invite"     // 邀请bot加入群聊（只是邀请，未正式入群）
-	LifeCycleME_Connect   SubType = "connect"    // 连接成功
-	LifeCycleME_Enable    SubType = "enable"     // 启用
-	LifeCycleME_Disable   SubType = "disable"    // 禁用
-	NotifyNt_Poke         SubType = "poke"       // 戳一戳
-	NotifyNt_LuckyKing    SubType = "lucky_king" // 运气王
-	NotifyNt_Honor        SubType = "honor"      // 群荣誉变更
-	EssenceNt_Add         SubType = "add"        // 添加群精华
-	EssenceNt_Delete      SubType = "delete"     // 移除群精华
+	GroupAdmin_Set        SubType = "set"          // 某人设为管理员
+	GroupAdmin_Unset      SubType = "unset"        // 某人取消管理员
+	GroupDecrease_Leave   SubType = "leave"        // 主动退群
+	GroupDecrease_Kick    SubType = "kick"         // 别人被踢出群
+	GroupDecrease_KickMe  SubType = "kick_me"      // 机器人自己被踢出群聊
+	GroupIncrease_Approve SubType = "approve"      // 同意入群
+	GroupIncrease_Invite  SubType = "invite"       // 被邀请入群
+	GroupBan_Ban          SubType = "ban"          // 禁言
+	GroupBan_ListBan      SubType = "list_ban"     // 解除禁言
+	GroupReq_Add          SubType = "add"          // 加群请求
+	GroupReq_Invite       SubType = "invite"       // 邀请bot加入群聊（只是邀请，未正式入群）
+	LifeCycleME_Connect   SubType = "connect"      // 连接成功
+	LifeCycleME_Enable    SubType = "enable"       // 启用
+	LifeCycleME_Disable   SubType = "disable"      // 禁用
+	NotifyNt_Poke         SubType = "poke"         // 戳一戳
+	NotifyNt_LuckyKing    SubType = "lucky_king"   // 运气王
+	NotifyNt_Honor        SubType = "honor"        // 群荣誉变更
+	NotifyNt_InputStatus  SubType = "input_status" // 用户输入状态变化（NapCat)
+	EssenceNt_Add         SubType = "add"          // 添加群精华
+	EssenceNt_Delete      SubType = "delete"       // 移除群精华
 )

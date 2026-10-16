@@ -92,20 +92,24 @@ func (h *Websocket) Run() {
 			}
 		}
 	}()
-	go func() {
-		for {
-			select {
-			case <-ctx.Done():
+	go h.Write(ctx, errCh)
+	go h.Read(ctx, errCh)
+}
+func (h *Websocket) Write(ctx context.Context, errCh chan error) {
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case msg := <-h.SendCh:
+			err := h.conn.WriteMessage(msg.MessageType, msg.Message)
+			if err != nil {
+				errCh <- newerror.MakeError(newerror.CodeWebSocketWriteError, h.Close(), newerror.LevelError)
 				return
-			case msg := <-h.SendCh:
-				err := h.conn.WriteMessage(msg.MessageType, msg.Message)
-				if err != nil {
-					errCh <- newerror.MakeError(newerror.CodeWebSocketWriteError, h.Close(), newerror.LevelError)
-					return
-				}
 			}
 		}
-	}()
+	}
+}
+func (h *Websocket) Read(ctx context.Context, errCh chan error) {
 	for {
 		messageType, message, err := h.conn.ReadMessage()
 		if err != nil {
@@ -130,6 +134,5 @@ func (h *Websocket) Run() {
 		if messageType == websocket.BinaryMessage {
 			errCh <- newerror.MakeError(newerror.CodeUnsupportedMedia, errors.New("recive binary message"), newerror.LevelInfo)
 		}
-
 	}
 }
