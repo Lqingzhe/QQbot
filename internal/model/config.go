@@ -5,6 +5,7 @@ type Config struct {
 	Api           ApiConfig
 	Handler       HandlerConfig
 	Service       ServiceConfig
+	Dao           DBConfig
 	ResponserList []Responser
 }
 type Responser struct {
@@ -24,4 +25,14 @@ type ApiConfig struct {
 }
 type GlobalConfig struct {
 	DeviceID int
+}
+type DBConfig struct {
+	PgConfig PgVectorConfig
+}
+type PgVectorConfig struct {
+	Username    string
+	Password    string
+	Host        string
+	Port        string
+	MessageList int64
 }
