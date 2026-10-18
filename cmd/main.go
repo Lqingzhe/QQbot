@@ -4,8 +4,9 @@ import (
 	"demo/internal/config"
 	"demo/internal/handler"
 	"demo/internal/service"
-	newlog "demo/pkg/log"
 	"fmt"
+
+	newlog "github.com/Lqingzhe/go-common-tool/log"
 )
 
 //	func main() {
@@ -91,6 +92,6 @@ func main() {
 	Service.Run(Config)
 	Handler.Run()
 
-	fmt.Scanln()//回车触发优雅退出
+	fmt.Scanln() //回车触发优雅退出
 	将配置文件写入持久化
 }
