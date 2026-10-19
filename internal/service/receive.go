@@ -2,11 +2,11 @@ package service
 
 import (
 	"context"
-	"demo/internal/model"
-	"demo/internal/tool"
-	newerror "demo/pkg/error"
-	newlog "demo/pkg/log"
 	"errors"
+	"qqbot/internal/model"
+	"qqbot/internal/tool"
+	newerror "qqbot/pkg/error"
+	newlog "qqbot/pkg/log"
 	"time"
 )
 

@@ -41,14 +41,14 @@ type Event struct {
 	RequestType   RequestType   `json:"request_type"` // 请求类型
 	MetaEventType MeteEventType `json:"meta_event_type"`
 	SubType       SubType       `json:"sub_type"`    // 消息子类型
-	MessageID     int32         `json:"message_id"`  // 消息 ID
+	MessageID     int64         `json:"message_id"`  // 消息 ID
 	UserID        int64         `json:"user_id"`     // 发送者 QQ 号
 	GroupID       int64         `json:"group_id"`    // 群号（群消息时存在）
 	RawMessage    string        `json:"raw_message"` // 原始消息（CQ 码字符串）
-	Font          int32         `json:"font"`        // 字体
+	Font          int64         `json:"font"`        // 字体
 	Sender        Sender        `json:"sender"`      // 发送者信息
 	Message       any           `json:"message"`     // 消息内容（array 格式为 []MessageSegment，string 格式为 string）
-	MessageSeq    int32         `json:"message_seq"` // 消息序号（部分实现）
+	MessageSeq    int64         `json:"message_seq"` // 消息序号（部分实现）
 }
 
 // Sender 是消息发送者的信息

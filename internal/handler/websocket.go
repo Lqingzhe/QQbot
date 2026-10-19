@@ -2,15 +2,15 @@ package handler
 
 import (
 	"context"
-	"demo/internal/middleware"
-	"demo/internal/model"
-	"demo/internal/service"
-	newerror "demo/pkg/error"
-	newlog "demo/pkg/log"
 	"encoding/json/v2"
 	"errors"
+	"qqbot/internal/middleware"
+	"qqbot/internal/model"
+	"qqbot/internal/service"
 	"uuid"
 
+	newerror "github.com/Lqingzhe/go-common-tool/error"
+	newlog "github.com/Lqingzhe/go-common-tool/log"
 	"github.com/gorilla/websocket"
 )
 

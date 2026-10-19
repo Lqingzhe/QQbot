@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"demo/internal/model"
 	"fmt"
+	"qqbot/internal/model"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -11,17 +11,16 @@ import (
 
 func NewDBContext(config *model.Config) (*model.DBContext, error) {
 
-	pgvector,err:=initPgVector(config)
+	pgvector, err := initPgVector(config)
 	if err != nil {
 		return nil, err
 	}
 	return &model.DBContext{
 		PgVector: pgvector,
-
 	}, nil
 }
 
-func initPgVector(config *model.Config) (*model.PgVectorContext,error) {
+func initPgVector(config *model.Config) (*model.PgVectorContext, error) {
 	pgConfig := config.Dao.PgConfig
 	newContext := &model.PgVectorContext{
 		Limit: pgConfig.MessageList,
@@ -33,11 +32,11 @@ func initPgVector(config *model.Config) (*model.PgVectorContext,error) {
 		PrepareStmt:            true,
 	})
 	if err != nil {
-		return nil,fmt.Errorf("postgreSql connect error: %w", err)
+		return nil, fmt.Errorf("postgreSql connect error: %w", err)
 	}
-	if err=db.Exec("CREATE EXTENSION IF NOT EXISTS vector").Error;err!=nil{
-		return nil,fmt.Errorf("postgreSQL can not support vector: %w", err)
+	if err = db.Exec("CREATE EXTENSION IF NOT EXISTS vector").Error; err != nil {
+		return nil, fmt.Errorf("postgreSQL can not support vector: %w", err)
 	}
-	newContext.Client=db
-	return newContext,nil
+	newContext.Client = db
+	return newContext, nil
 }

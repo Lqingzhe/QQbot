@@ -1,9 +1,8 @@
 package middleware
 
 import (
-	newerror "demo/pkg/error"
-	"demo/pkg/log"
 	"errors"
+	"qqbot/pkg/log"
 	"time"
 
 	"uuid"

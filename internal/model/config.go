@@ -6,6 +6,7 @@ type Config struct {
 	Handler       HandlerConfig
 	Service       ServiceConfig
 	Dao           DBConfig
+	Agent         AgentConfig
 	ResponserList []Responser
 }
 type Responser struct {
@@ -19,6 +20,12 @@ type ServiceConfig struct {
 }
 type HandlerConfig struct {
 	ChannelLength int64
+	Websocket     WebsocketConfig
+}
+type WebsocketConfig struct {
+	Host  string
+	Port  string
+	Token string
 }
 type ApiConfig struct {
 	ListenerPost int64
@@ -35,4 +42,19 @@ type PgVectorConfig struct {
 	Host        string
 	Port        string
 	MessageList int64
+}
+
+type AgentConfig struct {
+	ChatLLM   ChatLLMConfig
+	Embedding EmbeddingConfig
+}
+type ChatLLMConfig struct {
+	URL       string
+	APIKey    string
+	ModelName string
+}
+type EmbeddingConfig struct {
+	URL       string
+	APIKey    string
+	ModelName string
 }

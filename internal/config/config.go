@@ -1,7 +1,7 @@
 package config
 
-import "demo/internal/model"
+import "qqbot/internal/model"
 
-func GetConfig()*model.Config{
+func GetConfig() *model.Config {
 
 }

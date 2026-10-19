@@ -1,6 +1,6 @@
 package middleware
 
-import newlog "demo/pkg/log"
+import newlog "qqbot/pkg/log"
 
 func WebBeginLog(rawLogger newlog.Logger, traceID string) newlog.Logger {
 

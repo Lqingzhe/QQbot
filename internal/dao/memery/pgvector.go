@@ -2,7 +2,7 @@ package memery
 
 import (
 	"context"
-	"demo/internal/model"
+	"qqbot/internal/model"
 
 	"github.com/Lqingzhe/go-common-tool/commondao"
 )

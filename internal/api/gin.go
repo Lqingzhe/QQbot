@@ -1,8 +1,8 @@
 package api
 
 import (
-	"demo/internal/middleware"
-	newlog "demo/pkg/log"
+	"qqbot/internal/middleware"
+	newlog "qqbot/pkg/log"
 
 	"github.com/gin-gonic/gin"
 )

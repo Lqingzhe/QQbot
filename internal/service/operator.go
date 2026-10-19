@@ -2,13 +2,14 @@ package service
 
 import (
 	"context"
-	"demo/internal/model"
-	"demo/internal/service/handlemessage"
-	"demo/internal/tool"
-	newerror "demo/pkg/error"
 	"errors"
 	"log"
+	"qqbot/internal/model"
+	"qqbot/internal/service/handlemessage"
+	"qqbot/internal/tool"
 	"sync"
+
+	"github.com/Lqingzhe/go-common-tool/error"
 )
 
 type Operate func(context.Context, chan model.Message, *model.Event) error
@@ -31,7 +32,7 @@ type operator struct {
 	sendCh       chan model.Message
 	groupList    *GroupList
 	privateList  *PrivateList
-	selfQQ       int64
+	config       *model.Config
 }
 
 var Operator *operator
@@ -53,8 +54,8 @@ func init() {
 func SetOperatorHub(sendCh chan model.Message) {
 	Operator.sendCh = sendCh
 }
-func GetAndInitOperator(selfQQID int64) *operator {
-	Operator.selfQQ = selfQQID
+func GetAndInitOperator(config *model.Config) *operator {
+	Operator.config = config
 	return Operator
 }
 func GetOperator() *operator {
@@ -73,7 +74,7 @@ func IsInPrivate(qqID int64) bool {
 	return ok
 }
 func GetSelfQQ() int64 {
-	return Operator.selfQQ
+	return Operator.config.Service.SelfQQ
 }
 func Register(key string, op Operate) {
 	_, ok := Operator.immutableKey[key]

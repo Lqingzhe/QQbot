@@ -2,3 +2,5 @@
 .idea
 qbot.posf
 *.exe
+config.yaml
+config.yml

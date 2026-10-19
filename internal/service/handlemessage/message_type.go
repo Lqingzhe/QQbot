@@ -2,7 +2,7 @@ package handlemessage
 
 import (
 	"context"
-	"demo/internal/model"
+	"qqbot/internal/model"
 )
 
 //func(context.Context, chan model.Message,*model.Event) error

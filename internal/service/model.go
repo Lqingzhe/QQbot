@@ -1,8 +1,9 @@
 package service
 
 import (
-	"demo/internal/model"
-	newlog "demo/pkg/log"
+	"qqbot/internal/model"
+
+	newlog "github.com/Lqingzhe/go-common-tool/log"
 )
 
 //type ReqModel struct {

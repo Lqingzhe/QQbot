@@ -1,4 +1,4 @@
-module demo
+module qqbot
 
 go 1.27.0
 

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"demo/internal/config"
-	"demo/internal/handler"
-	"demo/internal/service"
 	"fmt"
+	"qqbot/internal/config"
+	"qqbot/internal/handler"
+	"qqbot/internal/service"
 
 	newlog "github.com/Lqingzhe/go-common-tool/log"
 )
@@ -85,7 +85,7 @@ func main() {
 	ServiceOperator := service.GetAndInitOperator(Config.Service.SelfQQ)
 	Service := service.NewService(Config, ServiceOperator)
 	newlog.SetLabel("通过配置文件配置access_token字段")
-	Handler, err := handler.NewWebsocket("ws://127.0.0.1:3001?access_token=token", logger, Service)
+	Handler, err := handler.NewWebsocket("ws://"+Config.Handler.Websocket.Host+":"+Config.Handler.Websocket.Port+"?access_token="+Config.Handler.Websocket.Token, logger, Service)
 	if err != nil {
 		logger.LogInitFatal(err, "handler create fail")
 	}
