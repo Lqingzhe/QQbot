@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"qqbot/internal/config"
 	"qqbot/internal/handler"
+	_ "qqbot/internal/plug"
 	"qqbot/internal/service"
 
 	newlog "github.com/Lqingzhe/go-common-tool/log"
@@ -82,8 +83,9 @@ func main() {
 
 	Config := config.GetConfig()
 	logger := newlog.InitLog("QQbot", Config.Global.DeviceID)
-	ServiceOperator := service.GetAndInitOperator(Config.Service.SelfQQ)
-	Service := service.NewService(Config, ServiceOperator)
+	ServiceOperator := service.GetAndInitOperator(Config)
+	ServiceScheduleTask := service.GetAndInitTaskHub(Config)
+	Service := service.NewService(Config, ServiceOperator, ServiceScheduleTask)
 	newlog.SetLabel("通过配置文件配置access_token字段")
 	Handler, err := handler.NewWebsocket("ws://"+Config.Handler.Websocket.Host+":"+Config.Handler.Websocket.Port+"?access_token="+Config.Handler.Websocket.Token, logger, Service)
 	if err != nil {

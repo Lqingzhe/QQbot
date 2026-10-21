@@ -63,15 +63,21 @@ import (
 //}
 
 type Service struct {
-	logCh       chan newlog.Logger
-	config      *model.Config
-	operatorHub *operator
+	logCh        chan newlog.Logger
+	sendCh       chan model.Message
+	config       *model.Config
+	operatorHub  *operator
+	scheduleTask *taskHub
 }
 
-func NewService(config *model.Config, operatorHub *operator) *Service {
+func NewService(config *model.Config, operatorHub *operator, taskHub *taskHub) *Service {
 	return &Service{
-		logCh:       make(chan newlog.Logger, config.Service.ChannelLength),
-		config:      config,
-		operatorHub: operatorHub,
+		logCh:        make(chan newlog.Logger, config.Service.ChannelLength),
+		config:       config,
+		operatorHub:  operatorHub,
+		scheduleTask: taskHub,
 	}
+}
+func (s *Service) SetSendCh(sendCh chan model.Message) {
+	s.sendCh = sendCh
 }

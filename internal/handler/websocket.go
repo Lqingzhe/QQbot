@@ -35,7 +35,7 @@ func NewWebsocket(URL string, logger newlog.Logger, Service *service.Service) (n
 	}
 	newlog.SetLabel("Lack Config To limit Channel Capacity")
 	ch := make(chan model.Message, 100)
-	service.SetOperatorHub(ch)
+	Service.SetSendCh(ch)
 	return &Websocket{
 		logger:  logger,
 		conn:    conn,

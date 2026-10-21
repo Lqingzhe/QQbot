@@ -5,9 +5,11 @@ import (
 	"errors"
 	"qqbot/internal/model"
 	"qqbot/internal/tool"
-	newerror "qqbot/pkg/error"
-	newlog "qqbot/pkg/log"
+
 	"time"
+
+	newerror "github.com/Lqingzhe/go-common-tool/error"
+	newlog "github.com/Lqingzhe/go-common-tool/log"
 )
 
 func (s *Service) Run(config *model.Config) {
@@ -22,6 +24,7 @@ func (s *Service) Run(config *model.Config) {
 			g = append(g, info.QQid)
 		}
 	}
+	s.scheduleTask.Do(s.sendCh)
 }
 func (s *Service) DistributeMessage(logger newlog.Logger, traceID string, oneBotResp *model.OneBotResp) {
 	if oneBotResp.Echo != "" || oneBotResp.Status != "" {

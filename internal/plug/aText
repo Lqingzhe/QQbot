@@ -1,4 +1,5 @@
 1:traceID在ctx中，key为"trace_id"
 2:service.IsInGroup(),service.IsInPrivate()用于判断会话id是否需要处理
-3:service.Register()注册行为分支级别的插件
-4:注册插件时在plug文件夹下放入插件文件夹，并在./init.go文件中匿名导入包含了init()的包
+3:service.RegisterOperator()注册事件级别的插件
+4:注册插件时在plug文件夹下放入插件文件夹，并在./init.go文件中匿名导入包含了init()的包，导入时建议写在官方导入的后面，否则可能出现不宜排查的问题
+5:注册定时任务时需要对传入的ctx做处理，用于上层管理任务执行
