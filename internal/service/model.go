@@ -1,6 +1,7 @@
 package service
 
 import (
+	"qqbot/internal/agent"
 	"qqbot/internal/model"
 
 	newlog "github.com/Lqingzhe/go-common-tool/log"
@@ -68,14 +69,16 @@ type Service struct {
 	config       *model.Config
 	operatorHub  *operator
 	scheduleTask *taskHub
+	agent        *agent.Agent
 }
 
-func NewService(config *model.Config, operatorHub *operator, taskHub *taskHub) *Service {
+func NewService(config *model.Config, operatorHub *operator, taskHub *taskHub, agent *agent.Agent) *Service {
 	return &Service{
 		logCh:        make(chan newlog.Logger, config.Service.ChannelLength),
 		config:       config,
 		operatorHub:  operatorHub,
 		scheduleTask: taskHub,
+		agent:        agent,
 	}
 }
 func (s *Service) SetSendCh(sendCh chan model.Message) {

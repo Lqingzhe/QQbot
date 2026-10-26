@@ -49,9 +49,14 @@ type AgentConfig struct {
 	Embedding EmbeddingConfig
 }
 type ChatLLMConfig struct {
-	URL       string
-	APIKey    string
-	ModelName string
+	URL            string
+	APIKey         string
+	ModelName      string
+	SpareURL       string
+	SpareAPIKey    string
+	SpareModelName string
+	MaxThinkStep   int
+	Promote        string
 }
 type EmbeddingConfig struct {
 	URL       string
