@@ -94,10 +94,10 @@ func main() {
 	if err != nil {
 		logger.LogInitFatal(err, "embedding create fail")
 	}
-	agent := agent.NewAgent(chatLLM, embeddingModel)
+	Agent := agent.NewAgent(chatLLM, embeddingModel)
 	ServiceOperator := service.GetAndInitOperator(Config)
 	ServiceScheduleTask := service.GetAndInitTaskHub(Config)
-	Service := service.NewService(Config, ServiceOperator, ServiceScheduleTask, agent)
+	Service := service.NewService(Config, ServiceOperator, ServiceScheduleTask, Agent)
 	newlog.SetLabel("通过配置文件配置access_token字段")
 	Handler, err := handler.NewWebsocket("ws://"+Config.Handler.Websocket.Host+":"+Config.Handler.Websocket.Port+"?access_token="+Config.Handler.Websocket.Token, logger, Service)
 	if err != nil {
