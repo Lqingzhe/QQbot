@@ -6,9 +6,11 @@ import (
 	"qqbot/internal/agent/chatllm"
 	"qqbot/internal/agent/embedding"
 	"qqbot/internal/config"
+	"qqbot/internal/dao"
 	"qqbot/internal/handler"
 	"qqbot/internal/plug"
 	"qqbot/internal/service"
+	"qqbot/internal/service/handlemessage"
 
 	newlog "github.com/Lqingzhe/go-common-tool/log"
 )
@@ -86,7 +88,7 @@ func main() {
 
 	Config := config.GetConfig()
 	logger := newlog.InitLog("QQbot", Config.Global.DeviceID)
-	eventOperator, scheduleTask, agentTool, err := plug.RegisterPlug(Config, logger)
+	eventOperatorHub, scheduleTask, agentTool, err := plug.RegisterPlug(Config, logger)
 	if err != nil {
 		logger.LogInitFatal(err, "plug register failed")
 	}
@@ -98,7 +100,15 @@ func main() {
 	if err != nil {
 		logger.LogInitFatal(err, "embedding create fail")
 	}
+	dbContext, err := dao.NewDBContext(Config)
+	if err != nil {
+		logger.LogInitFatal(err, "dbContext create fail")
+	}
 	Agent := agent.NewAgent(chatLLM, embeddingModel)
+	eventOperator, err := handlemessage.NewEventOperator(eventOperatorHub, dbContext, Agent)
+	if err != nil {
+		logger.LogInitFatal(err, "handlemessage create fail")
+	}
 	Service := service.NewService(Config, eventOperator, scheduleTask, Agent)
 	newlog.SetLabel("通过配置文件配置access_token字段")
 	Handler, err := handler.NewWebsocket("ws://"+Config.Handler.Websocket.Host+":"+Config.Handler.Websocket.Port+"?access_token="+Config.Handler.Websocket.Token, logger, Service)

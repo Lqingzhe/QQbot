@@ -12,7 +12,7 @@ import (
 	newlog "github.com/Lqingzhe/go-common-tool/log"
 )
 
-func RegisterPlug(config *model.Config, logger newlog.Logger) (*handlemessage.Operator, *service.TaskHub, *agenttool.Tool, error) {
+func RegisterPlug(config *model.Config, logger newlog.Logger) (*handlemessage.OperateHub, *service.TaskHub, *agenttool.Tool, error) {
 	eventOperator := eventplug.RegisterEventPlug(config)
 	scheduleTaskHub := scheduletaskplug.RegisterScheduleTask()
 	tool, err := agenttoolplug.RegisterAgentToolPlug(logger)
