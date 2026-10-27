@@ -1,11 +1,13 @@
 package agenttool
 
-import "testing"
+import (
+	"testing"
+
+	newlog "github.com/Lqingzhe/go-common-tool/log"
+)
 
 func Test_NewTool(t *testing.T) {
-	tool, err := NewTool()
-	if err != nil {
-		t.Fatal(err)
-	}
+	tool := NewTool(newlog.InitLog("task-NewTool",1))
+
 	t.Log(tool)
 }

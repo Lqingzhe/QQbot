@@ -38,6 +38,7 @@ func (i *ContextInfo) Set(ctx context.Context, dbContext *model.DBContext) (err 
 // func (i *ContextInfo) Delete(ctx context.Context, dbContext *model.DBContext) (err error) {
 //
 // }
+
 func (i *ContextInfo) Update(ctx context.Context, dbContext *model.DBContext) (exist bool, err error) {
 
 }

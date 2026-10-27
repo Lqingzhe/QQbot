@@ -37,14 +37,10 @@ type LLM struct {
 	config    *model.Config
 }
 
-func NewLLM(config *model.Config, logger newlog.Logger) (*LLM, error) {
+func NewLLM(config *model.Config, logger newlog.Logger, tool *agenttool.Tool) (*LLM, error) {
 	newLLM := &LLM{}
-	tool, err := agenttool.NewTool()
-	if err != nil {
-		return nil, err
-	}
 	newLLM.AgentTool = tool
-	err = newLLM.NewRunner(config, logger)
+	err := newLLM.NewRunner(config, logger)
 	if err != nil {
 		return nil, err
 	}
@@ -63,13 +59,16 @@ func (i *LLM) NewRunner(Config *model.Config, logger newlog.Logger) error {
 			return err
 		}
 	}
-
+	tool, err := i.AgentTool.GetTool()
+	if err != nil {
+		return err
+	}
 	agent, err := adk.NewChatModelAgent(context.Background(), &adk.ChatModelAgentConfig{
 		Instruction: Config.Agent.ChatLLM.Promote,
 		Model:       mainModel,
 		ToolsConfig: adk.ToolsConfig{
 			ToolsNodeConfig: compose.ToolsNodeConfig{
-				Tools: i.AgentTool.GetTool(), // 注册工具
+				Tools: tool, // 注册工具
 			},
 		},
 		MaxIterations: Config.Agent.ChatLLM.MaxThinkStep,

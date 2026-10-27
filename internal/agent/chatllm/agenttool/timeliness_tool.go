@@ -2,6 +2,7 @@ package agenttool
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	newerror "github.com/Lqingzhe/go-common-tool/error"
@@ -10,13 +11,21 @@ import (
 	"github.com/cloudwego/eino/schema"
 )
 
-var TimelinessToolHub = make(map[string]einotool.InvokableTool)
-
-func RegisterTimelinessTool(toolName string, tool einotool.InvokableTool) {
-	TimelinessToolHub[toolName] = tool
+func (i *Tool) RegisterTimelinessTool(toolName string, tool einotool.InvokableTool) error {
+	if _, ok := i.TimelinessToolHub[toolName]; !ok {
+		i.TimelinessToolHub[toolName] = tool
+		return nil
+	} else {
+		return newerror.MakeError(newerror.CodeResourceDuplicate, errors.New("ReturnTool名字重复: "+toolName), newerror.LevelFatal)
+	}
 }
-func RegisterOfficialTimelinessTool(logger newlog.Logger) {
-	RegisterTimelinessTool("get-time-now", NewGetTimeNow(logger))
+func (i *Tool) registerOfficialTimelinessTool(logger newlog.Logger) {
+	err := i.RegisterTimelinessTool("get-time-now", NewGetTimeNow(logger))
+	if err != nil {
+		err2 := newerror.TranslateError(err)
+		logger.AddOperation("注册Timeliness工具").AddLevel(err2.LogLevel).AddError(err2, err2.StatusCode).Log()
+		return
+	}
 }
 
 type GetTimeNow struct {

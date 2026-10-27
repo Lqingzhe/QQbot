@@ -5,38 +5,58 @@ import (
 	"qqbot/internal/model"
 )
 
-func (o *OfficialPlug) Poke(ctx context.Context, sendCh chan model.Message, Event *model.Event) error {
+func Poke(operator *Operator) Operate {
+	return func(ctx context.Context, sendCh chan model.Message, event *model.Event) error {
 
+	}
 }
 
-func (o *OfficialPlug) ClientStatus(ctx context.Context, sendCh chan model.Message, Event *model.Event) error {
+func ClientStatus(operator *Operator) Operate {
+	return func(ctx context.Context, sendCh chan model.Message, event *model.Event) error {
 
+	}
 }
 
-func (o *OfficialPlug) FriendRecall(ctx context.Context, sendCh chan model.Message, Event *model.Event) error {
+func FriendRecall(operator *Operator) Operate {
+	return func(ctx context.Context, sendCh chan model.Message, event *model.Event) error {
 
+	}
 }
-func (o *OfficialPlug) GroupRecall(ctx context.Context, sendCh chan model.Message, Event *model.Event) error {
+func GroupRecall(operator *Operator) Operate {
+	return func(ctx context.Context, sendCh chan model.Message, event *model.Event) error {
 
-}
-
-func (o *OfficialPlug) GroupBan(ctx context.Context, sendCh chan model.Message, Event *model.Event) error {
-
-}
-func (o *OfficialPlug) GroupListBan(ctx context.Context, sendCh chan model.Message, Event *model.Event) error {
-
+	}
 }
 
-func (o *OfficialPlug) GroupIncrease(ctx context.Context, sendCh chan model.Message, Event *model.Event) error {
+func GroupBan(operator *Operator) Operate {
+	return func(ctx context.Context, sendCh chan model.Message, event *model.Event) error {
 
+	}
 }
-func (o *OfficialPlug) GroupKickMe(ctx context.Context, sendCh chan model.Message, Event *model.Event) error {
+func GroupListBan(operator *Operator) Operate {
+	return func(ctx context.Context, sendCh chan model.Message, event *model.Event) error {
 
+	}
 }
 
-func (o *OfficialPlug) GroupSetAdmin(ctx context.Context, sendCh chan model.Message, Event *model.Event) error {
+func GroupIncrease(operator *Operator) Operate {
+	return func(ctx context.Context, sendCh chan model.Message, event *model.Event) error {
 
+	}
 }
-func (o *OfficialPlug) GroupUnsetAdmin(ctx context.Context, sendCh chan model.Message, Event *model.Event) error {
+func GroupKickMe(operator *Operator) Operate {
+	return func(ctx context.Context, sendCh chan model.Message, event *model.Event) error {
 
+	}
+}
+
+func GroupSetAdmin(operator *Operator) Operate {
+	return func(ctx context.Context, sendCh chan model.Message, event *model.Event) error {
+
+	}
+}
+func GroupUnsetAdmin(operator *Operator) Operate {
+	return func(ctx context.Context, sendCh chan model.Message, event *model.Event) error {
+
+	}
 }

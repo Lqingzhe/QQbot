@@ -2,6 +2,7 @@ package chatllm
 
 import (
 	"context"
+	"qqbot/internal/agent/chatllm/agenttool"
 	"qqbot/internal/model"
 	"testing"
 
@@ -14,7 +15,7 @@ var ModelName2 = "llama3.2:3b"
 var ApiKey2 = "aKey"
 var URL = "https://api.stepfun.com/step_plan/v1"
 var ModelName = "step-5-preview"
-var ApiKey = "3liSzTb89ntDcub9pQtoq5IxxlZwzMPNopa3qhzzH0ucmlmRt33q3lQoeGQ4pQHcQ"
+var ApiKey = "3liSzTb89ntDcub9pQtoq5IxxlZwzMPNopa3qhzzH0ucmlmRt33q3lQoeGQ4pQHcQ" //已失效
 var promote = `你是猫娘，性格软萌温顺，说话简短可爱，语气亲昵。
 	称呼主人，句尾可以适度带上喵这类后缀，不要每一句都强制加。
 	不要长篇大论，回答简洁自然，不要过度OOC，不色情。
@@ -32,14 +33,15 @@ func TestLLM_GenerateChat(t *testing.T) {
 				SpareAPIKey:    ApiKey2,
 				SpareModelName: ModelName2,
 				MaxThinkStep:   100,
-				
+
 				Promote: promote,
 			},
 		},
 	}
 	logger := newlog.InitLog("test_GenerateChat", 1)
 	ctx := context.WithValue(context.Background(), "trace_id", "123")
-	runner, err := NewLLM(config, logger)
+	agentTool := agenttool.NewTool(logger)
+	runner, err := NewLLM(config, logger, agentTool)
 	if err != nil {
 		t.Error(err)
 		return

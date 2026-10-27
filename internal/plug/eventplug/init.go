@@ -1,7 +1,13 @@
 package eventplug
 
-import "qqbot/internal/service"
+import (
+	"qqbot/internal/model"
+	"qqbot/internal/service/handlemessage"
 
-func RegisterEventPlug() {
-	service.RegisterOfficialOP() // 官方插件
+)
+
+func RegisterEventPlug(Config *model.Config) *handlemessage.Operator{
+	Operator :=handlemessage.NewEventOperator(Config) // 官方插件
+
+	return Operator
 }

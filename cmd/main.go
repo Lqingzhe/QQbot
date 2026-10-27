@@ -86,8 +86,11 @@ func main() {
 
 	Config := config.GetConfig()
 	logger := newlog.InitLog("QQbot", Config.Global.DeviceID)
-	plug.RegisterPlug(logger)
-	chatLLM, err := chatllm.NewLLM(Config, logger)
+	eventOperator, scheduleTask, agentTool, err := plug.RegisterPlug(Config, logger)
+	if err != nil {
+		logger.LogInitFatal(err, "plug register failed")
+	}
+	chatLLM, err := chatllm.NewLLM(Config, logger, agentTool)
 	if err != nil {
 		logger.LogInitFatal(err, "chatLLM create fail")
 	}
@@ -96,9 +99,7 @@ func main() {
 		logger.LogInitFatal(err, "embedding create fail")
 	}
 	Agent := agent.NewAgent(chatLLM, embeddingModel)
-	ServiceOperator := service.GetAndInitOperator(Config)
-	ServiceScheduleTask := service.GetAndInitTaskHub(Config)
-	Service := service.NewService(Config, ServiceOperator, ServiceScheduleTask, Agent)
+	Service := service.NewService(Config, eventOperator, scheduleTask, Agent)
 	newlog.SetLabel("通过配置文件配置access_token字段")
 	Handler, err := handler.NewWebsocket("ws://"+Config.Handler.Websocket.Host+":"+Config.Handler.Websocket.Port+"?access_token="+Config.Handler.Websocket.Token, logger, Service)
 	if err != nil {
