@@ -12,9 +12,12 @@ import (
 
 var TimelinessToolHub = make(map[string]einotool.InvokableTool)
 
-func init() {
-	TimelinessToolHub["get-time-now"] = NewGetTimeNow(newlog.InitLog("tool_get-time-now", 2))
-} //测试用，记得删
+func RegisterTimelinessTool(toolName string, tool einotool.InvokableTool) {
+	TimelinessToolHub[toolName] = tool
+}
+func RegisterOfficialTimelinessTool(logger newlog.Logger) {
+	RegisterTimelinessTool("get-time-now", NewGetTimeNow(logger))
+}
 
 type GetTimeNow struct {
 	logger newlog.Logger

@@ -110,7 +110,7 @@ func (o *operator) do(ctx context.Context, key string, Event *model.Event, sendC
 	}
 	return op(ctx, sendCh, Event)
 }
-func init() {
+func RegisterOfficialOP() {
 	officialPlug := handlemessage.NewOfficialPlug(IsInPrivate, IsInGroup, GetSelfQQ)
 	{
 		//message

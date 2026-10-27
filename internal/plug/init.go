@@ -1,5 +1,13 @@
 package plug
 
 import (
-	_ "qqbot/internal/service" //注册主要功能
+	"qqbot/internal/plug/agenttoolplug"
+	"qqbot/internal/plug/eventplug"
+
+	newlog "github.com/Lqingzhe/go-common-tool/log"
 )
+
+func RegisterPlug(logger newlog.Logger) {
+	eventplug.RegisterEventPlug()
+	agenttoolplug.RegisterAgentToolPlug(logger)
+}

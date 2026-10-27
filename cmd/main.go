@@ -7,7 +7,7 @@ import (
 	"qqbot/internal/agent/embedding"
 	"qqbot/internal/config"
 	"qqbot/internal/handler"
-	_ "qqbot/internal/plug"
+	"qqbot/internal/plug"
 	"qqbot/internal/service"
 
 	newlog "github.com/Lqingzhe/go-common-tool/log"
@@ -86,6 +86,7 @@ func main() {
 
 	Config := config.GetConfig()
 	logger := newlog.InitLog("QQbot", Config.Global.DeviceID)
+	plug.RegisterPlug(logger)
 	chatLLM, err := chatllm.NewLLM(Config, logger)
 	if err != nil {
 		logger.LogInitFatal(err, "chatLLM create fail")
