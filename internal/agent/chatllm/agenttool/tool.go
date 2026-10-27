@@ -31,20 +31,23 @@ func (i *Tool) GetTool() ([]einotool.BaseTool, error) {
 	if i.ToolHub == nil {
 		i.rwMu.RUnlock()
 		i.rwMu.Lock()
-		defer i.rwMu.Unlock()
 		i.ToolHub = make(map[string]bool, len(i.ReturnToolHub)+len(i.TimelinessToolHub))
 		for k := range i.ReturnToolHub {
 			if _, ok := i.ToolHub[k]; ok {
+				i.rwMu.Unlock()
 				return nil, newerror.MakeError(newerror.CodeResourceDuplicate, errors.New("ToolName 重复: "+k), newerror.LevelFatal)
 			}
 			i.ToolHub[k] = true
 		}
 		for k := range i.TimelinessToolHub {
 			if _, ok := i.ToolHub[k]; ok {
+				i.rwMu.Unlock()
 				return nil, newerror.MakeError(newerror.CodeResourceDuplicate, errors.New("ToolName 重复: "+k), newerror.LevelFatal)
 			}
 			i.ToolHub[k] = false
 		}
+		i.rwMu.Unlock()
+		i.rwMu.RLock()
 	}
 	list := make([]einotool.BaseTool, 0, len(i.ToolHub))
 	for k, v := range i.ToolHub {

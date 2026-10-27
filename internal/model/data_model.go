@@ -15,7 +15,7 @@ type MemeryModel struct {
 	UserID    int64
 	Content   string
 	Vector    []float32
-	缺少置信度部分
+	//缺少置信度部分
 }
 
 func (_ *MemeryModel) Data() {

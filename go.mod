@@ -17,7 +17,7 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.2.0 // indirect
-	github.com/Lqingzhe/go-common-tool v0.0.0-20261018111658-d2c03648d83d // indirect
+	github.com/Lqingzhe/go-common-tool v0.0.1 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/bytedance/gopkg v0.1.4 // indirect
