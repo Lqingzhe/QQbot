@@ -110,14 +110,20 @@ func NewEventOperator(OperateHub *OperateHub, dbContext *model.DBContext, Agent 
 	}
 	return newOperator, nil
 }
-func (o *Operator) Do(ctx context.Context, key string, Event *model.Event, sendCh chan model.Message) error {
+func (o *Operator) Do(ctx context.Context, key string, Event *model.Event, sendCh chan model.Message, errCh chan error) {
 	o.operateHub.rwMu.RLock()
 	op, ok := o.operateHub.sumHub[key]
 	o.operateHub.rwMu.RUnlock()
 	if !ok {
-		return newerror.MakeError(newerror.CodeMethodNotAllowed, errors.New("该分支未定义行为"), newerror.LevelInfo)
+		errCh <- newerror.MakeError(newerror.CodeMethodNotAllowed, errors.New("该分支未定义行为: "+key), newerror.LevelInfo)
+		return
 	}
-	return op(ctx, sendCh, Event)
+	go func() {
+		err := op(ctx, sendCh, Event)
+		if err != nil {
+			errCh <- err
+		}
+	}()
 }
 func (o *Operator) registerOP() error {
 	for key, op := range o.operateHub.temporaryHub {

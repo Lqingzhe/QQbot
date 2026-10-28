@@ -129,7 +129,7 @@ func (h *Websocket) Read(ctx context.Context, errCh chan error) {
 		traceID := h.Uuid.String()
 		logger := middleware.WebBeginLog(h.logger, traceID)
 		if messageType == websocket.TextMessage {
-			h.service.DistributeMessage(logger, traceID, oneBotResp)
+			h.service.DistributeMessage(errCh, logger, traceID, oneBotResp)
 		}
 		if messageType == websocket.BinaryMessage {
 			errCh <- newerror.MakeError(newerror.CodeUnsupportedMedia, errors.New("recive binary message"), newerror.LevelInfo)
