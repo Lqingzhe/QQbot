@@ -1,6 +1,8 @@
-package tool
+package until
 
-import "strings"
+import (
+	"strings"
+)
 
 func GetRoutKet(Types ...string) string {
 	if len(Types) == 0 {

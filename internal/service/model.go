@@ -66,7 +66,7 @@ import (
 
 type Service struct {
 	logCh        chan newlog.Logger
-	sendCh       chan model.Message
+	sendCh       chan model.WebsocketMessage
 	config       *model.Config
 	operatorHub  *handlemessage.Operator
 	scheduleTask *TaskHub
@@ -82,6 +82,6 @@ func NewService(config *model.Config, operatorHub *handlemessage.Operator, taskH
 		agent:        agent,
 	}
 }
-func (s *Service) SetSendCh(sendCh chan model.Message) {
+func (s *Service) SetSendCh(sendCh chan model.WebsocketMessage) {
 	s.sendCh = sendCh
 }

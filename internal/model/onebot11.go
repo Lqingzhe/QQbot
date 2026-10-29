@@ -1,10 +1,5 @@
 package model
 
-type Message struct {
-	Message     []byte
-	MessageType int
-}
-
 //	type Event struct {
 //		Time        int64  `json:"time"`                  // 事件发生的时间戳
 //		PostType    string `json:"post_type"`             // 上报类型: message / notice / request
@@ -65,6 +60,11 @@ type Sender struct {
 }
 
 // MessageSegment 是消息段，array 格式下 message 字段的元素
+type Message struct {
+	Action string         `json:"action"`
+	Params map[string]any `json:"params"`
+	Echo   string         `json:"echo,omitempty"`
+}
 type MessageSegment struct {
 	Type string         `json:"type"` // 消息段类型：text / image / at / face ...
 	Data map[string]any `json:"data"` // 消息段数据，随 type 变化

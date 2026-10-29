@@ -6,6 +6,10 @@ import (
 	"gorm.io/gorm"
 )
 
+type WebsocketMessage struct {
+	MessageType int
+	Message     []byte
+}
 type MemeryModel struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time

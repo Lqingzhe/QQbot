@@ -2,11 +2,13 @@ package middleware
 
 import (
 	"errors"
-	"qqbot/pkg/log"
+
 	"time"
 
 	"uuid"
 
+	newerror "github.com/Lqingzhe/go-common-tool/error"
+	newlog "github.com/Lqingzhe/go-common-tool/log"
 	"github.com/gin-gonic/gin"
 )
 

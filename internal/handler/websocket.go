@@ -18,7 +18,7 @@ type Websocket struct {
 	logger  newlog.Logger
 	conn    *websocket.Conn
 	cancel  context.CancelFunc
-	SendCh  chan model.Message
+	SendCh  chan model.WebsocketMessage
 	service *service.Service
 	Uuid    uuid.UUID
 }
@@ -34,7 +34,7 @@ func NewWebsocket(URL string, logger newlog.Logger, Service *service.Service) (n
 		return nil, newerror.MakeError(newerror.CodeWebSocketUpgradeFailed, err, newerror.LevelError).SetHttpError(-1, "tcp connect error")
 	}
 	newlog.SetLabel("Lack Config To limit Channel Capacity")
-	ch := make(chan model.Message, 100)
+	ch := make(chan model.WebsocketMessage, 100)
 	Service.SetSendCh(ch)
 	return &Websocket{
 		logger:  logger,
@@ -129,7 +129,7 @@ func (h *Websocket) Read(ctx context.Context, errCh chan error) {
 		traceID := h.Uuid.String()
 		logger := middleware.WebBeginLog(h.logger, traceID)
 		if messageType == websocket.TextMessage {
-			h.service.DistributeMessage(errCh, logger, traceID, oneBotResp)
+			h.service.DistributeMessage(logger, traceID, oneBotResp)
 		}
 		if messageType == websocket.BinaryMessage {
 			errCh <- newerror.MakeError(newerror.CodeUnsupportedMedia, errors.New("recive binary message"), newerror.LevelInfo)

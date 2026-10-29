@@ -5,14 +5,17 @@ import (
 	"errors"
 	"log"
 	"qqbot/internal/agent"
+	"qqbot/internal/middleware"
 	"qqbot/internal/model"
 	"qqbot/internal/tool"
 	"sync"
+	"time"
 
 	"github.com/Lqingzhe/go-common-tool/error"
+	newlog "github.com/Lqingzhe/go-common-tool/log"
 )
 
-type Operate func(context.Context, chan model.Message, *model.Event) error
+type Operate func(context.Context, chan model.WebsocketMessage, *model.Event) error
 
 type GroupList struct {
 	List map[int64]struct{}
@@ -110,19 +113,23 @@ func NewEventOperator(OperateHub *OperateHub, dbContext *model.DBContext, Agent 
 	}
 	return newOperator, nil
 }
-func (o *Operator) Do(ctx context.Context, key string, Event *model.Event, sendCh chan model.Message, errCh chan error) {
+func (o *Operator) Do(ctx context.Context, key string, Event *model.Event, sendCh chan model.WebsocketMessage, logger newlog.Logger) {
 	o.operateHub.rwMu.RLock()
 	op, ok := o.operateHub.sumHub[key]
 	o.operateHub.rwMu.RUnlock()
 	if !ok {
-		errCh <- newerror.MakeError(newerror.CodeMethodNotAllowed, errors.New("该分支未定义行为: "+key), newerror.LevelInfo)
+		middleware.WebEndLog(logger.AddError(errors.New("该分支未定义行为: "+key), newerror.CodeMethodNotAllowed).AddLevel(newerror.LevelInfo).AddOperation("处理事件"))
 		return
 	}
 	go func() {
+		now := time.Now()
 		err := op(ctx, sendCh, Event)
 		if err != nil {
-			errCh <- err
+			err2 := newerror.TranslateError(err)
+			logger = logger.AddError(err2, err2.StatusCode).AddLevel(err2.LogLevel).AddOperation("处理事件")
 		}
+		logger = logger.AddLatencyAndTime(now)
+		middleware.WebEndLog(logger)
 	}()
 }
 func (o *Operator) registerOP() error {
@@ -137,40 +144,40 @@ func (o *Operator) registerOP() error {
 func (o *Operator) registerOfficialOP() {
 	{
 		//message
-		o.operateHub.registerBasicOp(tool.GetRoutKet(model.MessagePos.String(), model.PrivateMsg.String()), Private(o))
-		o.operateHub.registerBasicOp(tool.GetRoutKet(model.MessagePos.String(), model.GroupMsg.String()), Group(o))
+		o.operateHub.registerBasicOp(until.GetRoutKet(model.MessagePos.String(), model.PrivateMsg.String()), Private(o))
+		o.operateHub.registerBasicOp(until.GetRoutKet(model.MessagePos.String(), model.GroupMsg.String()), Group(o))
 	}
 
 	{
 		//notice
-		o.operateHub.registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.NotifyNt.String(), model.NotifyNt_Poke.String()), Poke(o))
+		o.operateHub.registerBasicOp(until.GetRoutKet(model.NoticePos.String(), model.NotifyNt.String(), model.NotifyNt_Poke.String()), Poke(o))
 
-		o.operateHub.registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.ClientStatusNt.String()), ClientStatus(o))
+		o.operateHub.registerBasicOp(until.GetRoutKet(model.NoticePos.String(), model.ClientStatusNt.String()), ClientStatus(o))
 
-		o.operateHub.registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.FriendRecallNt.String()), FriendRecall(o))
-		o.operateHub.registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupRecallNt.String()), GroupRecall(o))
+		o.operateHub.registerBasicOp(until.GetRoutKet(model.NoticePos.String(), model.FriendRecallNt.String()), FriendRecall(o))
+		o.operateHub.registerBasicOp(until.GetRoutKet(model.NoticePos.String(), model.GroupRecallNt.String()), GroupRecall(o))
 		{
 			//GroupBan
-			o.operateHub.registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupBanNt.String(), model.GroupBan_Ban.String()), GroupBan(o))
-			o.operateHub.registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupBanNt.String(), model.GroupBan_ListBan.String()), GroupListBan(o))
+			o.operateHub.registerBasicOp(until.GetRoutKet(model.NoticePos.String(), model.GroupBanNt.String(), model.GroupBan_Ban.String()), GroupBan(o))
+			o.operateHub.registerBasicOp(until.GetRoutKet(model.NoticePos.String(), model.GroupBanNt.String(), model.GroupBan_ListBan.String()), GroupListBan(o))
 		}
-		o.operateHub.registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupIncreaseNt.String()), GroupIncrease(o))
+		o.operateHub.registerBasicOp(until.GetRoutKet(model.NoticePos.String(), model.GroupIncreaseNt.String()), GroupIncrease(o))
 		{
 			//GroupDecrease
-			o.operateHub.registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupDecreaseNt.String(), model.GroupDecrease_KickMe.String()), GroupKickMe(o))
+			o.operateHub.registerBasicOp(until.GetRoutKet(model.NoticePos.String(), model.GroupDecreaseNt.String(), model.GroupDecrease_KickMe.String()), GroupKickMe(o))
 		}
 		{
 			//GroupAdmin
-			o.operateHub.registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupAdminNt.String(), model.GroupAdmin_Set.String()), GroupSetAdmin(o))
-			o.operateHub.registerBasicOp(tool.GetRoutKet(model.NoticePos.String(), model.GroupAdminNt.String(), model.GroupAdmin_Unset.String()), GroupUnsetAdmin(o))
+			o.operateHub.registerBasicOp(until.GetRoutKet(model.NoticePos.String(), model.GroupAdminNt.String(), model.GroupAdmin_Set.String()), GroupSetAdmin(o))
+			o.operateHub.registerBasicOp(until.GetRoutKet(model.NoticePos.String(), model.GroupAdminNt.String(), model.GroupAdmin_Unset.String()), GroupUnsetAdmin(o))
 		}
 	}
 	{
 		//Request
 		{
 			//GroupRequest
-			o.operateHub.registerBasicOp(tool.GetRoutKet(model.RequestPos.String(), model.GroupReq.String(), model.GroupReq_Add.String()), GroupApplyReq(o))
-			o.operateHub.registerBasicOp(tool.GetRoutKet(model.RequestPos.String(), model.GroupReq.String(), model.GroupReq_Invite.String()), GroupInviteReq(o))
+			o.operateHub.registerBasicOp(until.GetRoutKet(model.RequestPos.String(), model.GroupReq.String(), model.GroupReq_Add.String()), GroupApplyReq(o))
+			o.operateHub.registerBasicOp(until.GetRoutKet(model.RequestPos.String(), model.GroupReq.String(), model.GroupReq_Invite.String()), GroupInviteReq(o))
 		}
 	}
 }

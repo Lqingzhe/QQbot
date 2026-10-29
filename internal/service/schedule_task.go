@@ -11,14 +11,14 @@ import (
 	newlog "github.com/Lqingzhe/go-common-tool/log"
 )
 
-type Task func(context.Context, chan model.Message)
+type Task func(context.Context, chan model.WebsocketMessage)
 type TaskHub struct {
 	taskInfo map[string]Task
 	ctxHub   map[string]context.CancelFunc
 	mutex    sync.Mutex
 }
 
-func (t *TaskHub) Do(sendCh chan model.Message) {
+func (t *TaskHub) Do(sendCh chan model.WebsocketMessage) {
 	t.mutex.Lock()
 	defer t.mutex.Unlock()
 	for taskName, task := range t.taskInfo {
@@ -28,12 +28,12 @@ func (t *TaskHub) Do(sendCh chan model.Message) {
 	}
 }
 
-func NewScheduleTaskHub()*TaskHub {
-	newTaskHub:= &TaskHub{
+func NewScheduleTaskHub() *TaskHub {
+	newTaskHub := &TaskHub{
 		taskInfo: make(map[string]Task),
 		ctxHub:   make(map[string]context.CancelFunc),
 	}
-	newTaskHub.registerBasicScheduleTask("pingTest", func(ctx context.Context, sendCh chan model.Message) {
+	newTaskHub.registerBasicScheduleTask("pingTest", func(ctx context.Context, sendCh chan model.WebsocketMessage) {
 		ticker := time.NewTicker(24 * time.Hour)
 		for {
 			select {
@@ -52,7 +52,7 @@ func NewScheduleTaskHub()*TaskHub {
 	return newTaskHub
 }
 
-func(t *TaskHub) RegisterScheduleTask(taskName string, task Task) error {
+func (t *TaskHub) RegisterScheduleTask(taskName string, task Task) error {
 	t.mutex.Lock()
 	defer t.mutex.Unlock()
 	_, ok := t.taskInfo[taskName]
@@ -62,7 +62,7 @@ func(t *TaskHub) RegisterScheduleTask(taskName string, task Task) error {
 	t.taskInfo[taskName] = task
 	return nil
 }
-func (t *TaskHub)registerBasicScheduleTask(taskName string, task Task) {
+func (t *TaskHub) registerBasicScheduleTask(taskName string, task Task) {
 	t.mutex.Lock()
 	defer t.mutex.Unlock()
 	_, ok := t.taskInfo[taskName]
